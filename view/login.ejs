@@ -1,0 +1,171 @@
+<html>
+<head>
+    <meta charset="utf8">
+    <title> 로그인 </title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<style>
+    body {
+        /* 해당부분을 통해 이미지를 넣을수도 있습니다 */
+        background: coral;
+        /*background: url(""); <-이미지 불러오는 부분 바꿀꺼면 여기에 추가하기*/
+
+    }
+    #joinbox{
+        position: absolute;
+        top: 0; left: 0;right: 0;bottom: 0;
+        height: 50%;
+        width: 30%;
+        margin: 10% auto;
+        /*이미즈를 넣을 경우를 대비해서 하단에 rgba 값을 통해 메인에 투명한 효과 집어 넣음*/
+        background-color: rgba(255,255,255,0.3);
+        border-radius: 10%;
+        transition : background-color, height, width,transform;
+        transition-duration: 1s;
+        animation-duration: 0.5s;
+    }
+    #joinbox #headtext {
+        display: block;
+        height: 20%;
+        text-align: center;
+    }
+    #joinbox form{
+        width: 80%;
+        padding: 0;
+        margin: 0 auto;
+    }
+
+    #joinbox form div div input {
+        max-width: 70%;
+    }
+    #joinbox:hover{
+        background-color: rgba(255,255,255,1);
+        transform: scale(1.5);
+    }
+    #joinlnik{
+        text-align: center;
+    }
+    #join:hover{
+        cursor: pointer;
+    }
+
+    #message{
+        opacity: 0;
+        transition: opacity;
+        transition-duration: 1s;
+    }
+
+    @keyframes logformfadeOut {
+        0%{
+            width:20%;height: 30%;
+            opacity: 1;
+        }
+        100%{
+            width: 0%;height: 0%;
+            opacity: 0;
+        }
+
+    }
+
+</style>
+<body>
+<section id="joinbox">
+    <div id="fadectn">
+    <!--  설명부 텍스트 영역 입니다  -->
+    <div id="headtext">
+        <h1 id="webTitle">서비스 이름 </h1>
+        <div>이하 서비스 내용 입력받는 부분</div>
+    </div>
+    <!--  끝 -->
+    <!--   로그인 폼테그 영역 입니다  -->
+    <form class="form-horizontal " action="/action_page.php">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="id">ID  </label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="id" name="id" placeholder="Enter ID" pattern="^([a-z0-9]){6,10}$" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="pwd">Password  </label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Enter password" pattern="^([a-zA-Z0-9@#!$]){6,10}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label><input type="checkbox"> Remember me</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" id="loginbtn" class="btn btn-default">로그인</button>
+            </div>
+        </div>
+        <div class="alert alert-danger" id="message">
+            <span>회원값을 찾을수가 없습니다 다시 확인해주세요!</span>
+        </div>
+    </form>
+    <!--  끝 -->
+    <!--  회원가입 페이지 유도 -->
+    <div id="joinlnik">
+        아직 회원이 아니 신가요? <a id="join">회원가입 </a>
+    </div>
+    <!--  끝 -->
+    </div>
+</section>
+<script>
+    let joinlink = document.getElementById('join')
+    let logform = document.querySelector('#joinbox')
+    let logbtn = document.getElementById('loginbtn')
+    let message = document.querySelector('#message')
+    let fadectn = document.querySelector('#fadectn')
+
+    logbtn.onclick = redirectLogin
+    joinlink.onclick = redirectJoin
+    function redirectJoin() {
+        fadectn.style.display = 'none'
+        logform.style.animation = 'logformfadeOut 2s both'
+        setTimeout(()=>{window.location.href = '/join'},2000)
+    }
+    function redirectLogin(){
+        $("#loginbtn").attr("disabled","true")
+        let sendData = new Array()
+        let send = new Object()
+        send['id'] = $.trim($('#id').val())
+        send['pwd'] = $.trim($('#pwd').val())
+        sendData.push(send)
+        $.ajax({
+            type:"post",
+            url:'/user/login',
+            data: {data: JSON.stringify(sendData)},
+            dataType : 'text',
+            success:(text)=>{
+                console.log(text)
+                if(text == 1){
+                    fadectn.style.display = 'none'
+                    logform.style.animation = 'logformfadeOut 2s both'
+                    setTimeout(()=>{window.location.href = '/home'},2000)
+                }else{
+                    message.style.opacity = 1;
+                    $("#loginbtn").removeAttr("disabled")
+                }
+            },
+            error:(log)=>{
+                console.error(log)}
+        })
+        // setTimeout(()=>{window.location.href = '/page/home'},1000)
+    }
+
+</script>
+</body>
+</html>
