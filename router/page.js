@@ -11,7 +11,7 @@ module.exports = function (app) {
     app.get('/home',((req, res) => {
         let sess = req.session
 
-        res.render('home',{logdata : sess})
+        res.render('index',{logdata : sess,title:"임시"})
     }))
 
     // router.get('/chat',((req, res) => {
