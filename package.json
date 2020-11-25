@@ -1,7 +1,6 @@
 {
-  "name": "WebRTCServer",
+  "name": "webrtcserver",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,5 +23,14 @@
     "nodemon": "^2.0.6",
     "socket.io": "^2.3.0",
     "ws": "^7.3.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guswls1846/2020-dongyang-web-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/guswls1846/2020-dongyang-web-project/issues"
+  },
+  "homepage": "https://github.com/guswls1846/2020-dongyang-web-project#readme",
+  "description": ""
 }
