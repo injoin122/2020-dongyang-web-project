@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+</head>
+
+<body>
+    <div class="container">
+        {% extends 'top.html' %}
+
+        {% block content %}
+        <div id="contents">
+            <div id="contents_head">
+                <h3>
+                    <p>{{notice}}</p>
+                </h3>
+            </div>
+            <div id="contents_body">
+                <div class="boxOffice">
+                    <table>
+                       <colgroup>
+                           <col style="width:5%"/>
+                           <col style="width:15%"/>
+                           <col style="width:20%"/>
+                           <col style="width:auto"/>
+                           <col style="width:15%"/>
+                       </colgroup>
+                        <tr>
+                            <th class="rank">순위</th>
+                            <th class="poster">포스터</th>
+                            <th class="movieName">영화이름</th>
+                            <th class="overview">줄거리</th>
+                            <th class="date">개봉일</th>
+                        </tr>
+                        {% for n in boxOfficeList %}
+                        <tr>
+                            <td>{{boxOfficeList[n]["rank"]}}</td>
+                            <td><img src="{{movieInfos[n]['poster300']}}" height=200></td>
+                            <td><a href="/movieInfo/{{n}}" class="movieName_link">
+                                <span class="movieName">{{n}}</span></a></td>
+                            <td>{{movieInfos[n]["overview"]}}</td>
+                            <td>{{boxOfficeList[n]["openDt"]}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+</body>
+
+</html>
