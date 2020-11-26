@@ -88,7 +88,6 @@ let mongo = {
             })
         })
     },
-
     loginCheck:(id,pwd,res,sess)=>{
         mongoClient.connect(url,(err,db)=>{
             assert.equal(null,err);
