@@ -11,6 +11,9 @@ let page = require('./router/page')
 let user = require('./router/user')
 let board = require('./router/board')
 
+let logger = require('morgan')
+
+
 // http & https
 let http = require('http')
 // 혹시 사용하게 될수도 있을거 같아서
@@ -38,7 +41,7 @@ let mariadb = require('./module/mariadb')
 
 
 //MiddleWare 연결부
-
+app.use(logger('dev'));
 app.use(express.json()) //
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
@@ -63,8 +66,6 @@ app.get('/', ((req, res) => {
     mongo.connectCheck();
     mariadb.getConn();
     res.redirect('/home')
-
-
 }))
 
 
