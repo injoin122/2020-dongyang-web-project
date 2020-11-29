@@ -5,28 +5,40 @@ const log = console.log;
 console.log("test");
 const getHtml = async () => {
   try {
-    return await axios.get("http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode=0001");
+    return await axios.get("http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode=0001&date=20201130");
   } catch (error) {
     console.error(error);
   }
 };
 
-getHtml()
-  .then(html => {
-    let ulList = [];
+getHtml().then(html => {
+    let timetables = [];
     const $ = cheerio.load(html.data);
     const $movieList = $("body > div > div.sect-showtimes > ul > li");
 
     $movieList.each(function(i, elem) {
-      ulList[i] = {
-          title: $(this).find('div > div.info-movie > a > strong').text(),
-          url: $(this).find('div > div.type-hall > div.info-timetable > ul > li > a').attr('href'),
-          time : $(this).find('div > div.type-hall > div.info-timetable > ul > li > em').text(),
-          seat : $(this).find('div > div.type-hall > div.info-timetable > ul > li > span').text()
+      timetables[i] = {
+          title : $(this).find('div > div.info-movie > a > strong').text(),
+          timetable : getTimetable($(this))
       };
     });
 
-    const data = ulList.filter(n => n.title);
+    const data = timetables.filter(n => n.title);
+
+    console.log("test1231313 ",data[0].timetable);
     return data;
-  })
-  .then(res => log(res));
+  });
+
+  function getTimetable (movie){
+    var tuples = []
+    const timetables = movie.find('div > div.type-hall > div.info-timetable > ul > li')
+    
+    timetables.each(function(i,elem){
+      tuples[i] = {
+        link : timetables.find('a').attr('href'),
+        time : timetables.find('a > em').text(),
+        seat : timetables.find('a > span').text()
+      }
+    })
+    return tuples;
+  }
