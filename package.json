@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "assert": "^2.0.0",
+    "axios": "^0.21.0",
     "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
     "cookie-parser": "^1.4.5",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -21,6 +23,7 @@
     "mongodb": "^3.6.3",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.6",
+    "requests": "^0.3.0",
     "socket.io": "^2.3.0",
     "ws": "^7.3.1"
   },
