@@ -14,7 +14,8 @@ let datetime = new Date().toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
 let dateformat = datetime.split(" ")[0]
 const PROMISE = require('bluebird')
 
-
+let movie_seq = 0;
+let add_seq = 0;
 
 
 
@@ -32,77 +33,131 @@ const PROMISE = require('bluebird')
 //   Node에서는 비동기 방식으로 인해 Movie_seq가 겹치는 현상 일어남
 // [11-28] - 동기식 처리를 위해 코드 수정중
 //           해결법 찾아야 됨
+// [11-30] - PROMISE ALL 통해 이전 url 링크를 통한 모든 작업이 확인된후에 작업시작하는것으로 동기처리
 async function Clolling(){
-    let p1 = Promise.resolve()
-    let p2 = Promise.resolve()
-    let movie_seq = 0;
-    let add_seq = 0;
     let add_play_seq = 0;
+
+
     let title = ''
     let mongod = await mongo.mongConnect();
     let db = await mongod.db('test')
     let data = await db.collection('theaters').find({},{_id:'0',theaters_seq:'1'}).toArray();
-    console.log(data);
-    mongod.close()
+    // console.log(data);
+    // mongod.close()
     // BlueBird 모듈을 통해 하단의 코드를 PROMISE ALL을 통해
     // 순차적으로 처리를 하게 끔 만들 계획
-    let array = new Array();
-    var prom = data.map((item)=>{
-        
+    let tuples = new Array()
+
+    ////////////////////////////////////////////
+    // for(let count = 0 ; count < 1 ; count++){
+
+    let prom = data.map(async (data)=> {
+        let cgv = 'http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode=' + data.theaters_seq.replace("C-", "") + '&date=20201127'
+        // console.log(cgv)
+        let arry = new Array()
+        let body = await Axios.get(cgv)
+        // console.log(body)
+        let $ = cheerio.load(body.data)
+        let $movielist = $('body').children('div').children('div.sect-showtimes').children('ul').children('li')
+        // console.log($movielist)
+        // console.log(Array.isArray($movielist))
+        $movielist.each((i, elem) => {
+                let time = new Object();
+                if (true) {
+                    // p2 동기처리 위한 부분
+                    // 영화 제목 가져오기
+                    if ($(elem).find('strong').text().trim()) {
+                        title = $(elem).find('strong').text().trim();
+                        time['title'] = title
+                    }
+                    // 잔여 좌석수 / 시간 / 예약링크 등을 가지고오는 곳
+                    let $timetables = cheerio.load($(elem).html())
+                    let $timetablelist = $timetables('div').children('.type-hall').children('.info-timetable').children('ul').children('li')
+                    for (let i = 0; i < $timetablelist.length; i++) {
+                        if ($($timetablelist[i]).find('a').text()) time['href'] = $($($timetablelist[i]).find('a')).attr('href')
+                        else time['href'] = null
+                        time['time'] = $($timetablelist[i]).find('em').text()
+                        time['seat'] = $($timetablelist[i]).find('span').text()
+                        time['theater'] = data.theaters_seq
+                        tuples.push(time)
+                    }
+
+                }
+
+            }
+        )
     })
+    PROMISE.all(prom).then(async (result)=>{
+        let logdata = 0
+        // console.log(tuples)
+        // tuples.reduce((prevProm,data) =>{
+        //     return prevProm.then(()=>{
+        //         return promiseProcessing(data,db)
+        //     })
+        // },Promise.resolve())
+        console.log(tuples.length)
+        await promiseProcessing(tuples,logdata,db,mongod)
+        console.log("Done~!!!")
+    }).catch((err)=>{
+        // console.log(count)
+        // console.log(tuples)
+        throw err
+    })
+    PROMISE.all(inputdata).then(async (result)=>{
+        console.log("DB INPUT Done")
+        mongod.close()
+    }).catch((err)=>{
+        console.log(err)
+    })
+}
 
-    
-
-    // 동기처리 실패
-    // 초기 동기 처리 모델 링
-    // console.log(data)
-    // 하단의 방식으로는 C-0001 첫번쨰 영화에 
-    // 대해서만 정보값을 가지고는 문제가 생겼습니다.
-    // 영화 및 현재 상영중인 영화에대한 인서트 코드도 일단은 존재합니다.
-     for(let count = 0 ; count < data.length ; count++){
+let promiseProcessing = async (data,count,db,mongod) =>{
          console.log(count)
-         let cgv = 'http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode='+data[count].theaters_seq.replace("C-","")+'&date=20201127'
-         // console.log(cgv)
-         let body = await Axios.get(cgv)
-         // console.log(body)
-         let $ =  cheerio.load(body.data)
-         p1 = p1.then(()=>{
-             let $movielist =  $('body').children('div').children('div.sect-showtimes').children('ul').children('li')
-             return $movielist
-         })
-         p1.then(($movielist) =>{
-             let tuples = new Array()
-             $movielist.map( (i,elem)=>{
-                 // p2 동기처리 위한 부분
-                 p2 = p2.then(()=>{
-                     let time =  new Object();
-                     // 영화 제목 가져오기
-                     if ($(elem).find('strong').text().trim()) {
-                         title =  $(elem).find('strong').text().trim();
-                         time['title'] = title
-                     }
-                     // 잔여 좌석수 / 시간 / 예약링크 등을 가지고오는 곳
-                     let $timetables =  cheerio.load($(elem).html())
-                     let $timetablelist =  $timetables('div').children('.type-hall').children('.info-timetable').children('ul').children('li')
-                     for(let i = 0; i < $timetablelist.length;i++){
-                         if($($timetablelist[i]).find('a').text()) time['link'] =  $($($timetablelist[i]).find('a')).attr('href')
-                         else time['link'] = null
-                         time['time'] =  $($timetablelist[i]).find('em').text()
-                         time['seat'] =  $($timetablelist[i]).find('span').text()
-                         tuples.push(time)
-                     }
-                     return tuples
-                 })
-
-             })
-         })
-     }
-     
-     // 리턴 처리
-     p2.then((array)=>{
-         console.log(array)
-     })
-    
+        if(count==140){
+            mongod.close()
+            return "end"
+        }
+        db.collection('movie').find({SUBJECT:data[count].title},{}).toArray().then((result)=>{
+            if(result.length == 0){
+                db.collection('movie').find({},{}).toArray().then(result=>{
+                    db.collection('movie').insertOne({
+                        _id : ++add_seq ,
+                        SUBJECT : data[count].title,
+                        COUNTRY: "대한민국",
+                        GENRE : "",
+                        DIRECTOR : "",
+                        SUMMARY :"",
+                        GRADE:""
+                    }).then(()=>{
+                        db.collection('movie_play').insertOne({
+                            MOVIE_SEQ : add_seq,
+                            THEATERS_SEQ: data[count].theater,
+                            START_TIME : data[count].time,
+                            RUNNING_TIME : "",
+                            SEATS :"100",
+                            SEATS_LEFT:data[count].seat.replace("잔여좌석","").replace("석","").replace("마감","0").replace("매진","0").replace("준비중","0"),
+                            LINK:data[count].href
+                        }).then(()=>{
+                            promiseProcessing(data,count+1,db,mongod)
+                            return
+                        })
+                    })
+                })
+            }else{
+                db.collection('movie_play').insertOne({
+                    MOVIE_SEQ : result[0]._id,
+                    THEATERS_SEQ: data[count].theater,
+                    START_TIME : data[count].time,
+                    RUNNING_TIME : "",
+                    SEATS :"100",
+                    SEATS_LEFT:data[count].seat.replace("잔여좌석","").replace("석","").replace("마감","0").replace("매진","0").replace("준비중","0"),
+                    LINK:data[count].href
+                }).then(()=>{
+                    promiseProcessing(data,count+1,db,mongod)
+                    return
+                })
+            }
+        })
 }
 
 Clolling()
