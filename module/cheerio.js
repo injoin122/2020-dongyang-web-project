@@ -59,31 +59,29 @@ async function Clolling(){
         // console.log(body)
         let $ = cheerio.load(body.data)
         let $movielist = $('body').children('div').children('div.sect-showtimes').children('ul').children('li')
-        // console.log($movielist)
-        // console.log(Array.isArray($movielist))
-        $movielist.each((i, elem) => {
-                let time = new Object();
+        $movielist.map((i, elem) => {
                 if (true) {
                     // p2 동기처리 위한 부분
                     // 영화 제목 가져오기
                     if ($(elem).find('strong').text().trim()) {
                         title = $(elem).find('strong').text().trim();
-                        time['title'] = title
+
                     }
                     // 잔여 좌석수 / 시간 / 예약링크 등을 가지고오는 곳
                     let $timetables = cheerio.load($(elem).html())
                     let $timetablelist = $timetables('div').children('.type-hall').children('.info-timetable').children('ul').children('li')
                     for (let i = 0; i < $timetablelist.length; i++) {
+                        let time = new Object();
+                        time['title'] = title
                         if ($($timetablelist[i]).find('a').text()) time['href'] = $($($timetablelist[i]).find('a')).attr('href')
                         else time['href'] = null
                         time['time'] = $($timetablelist[i]).find('em').text()
                         time['seat'] = $($timetablelist[i]).find('span').text()
                         time['theater'] = data.theaters_seq
+                        console.log(time)
                         tuples.push(time)
                     }
-
                 }
-
             }
         )
     })
@@ -95,25 +93,20 @@ async function Clolling(){
         //         return promiseProcessing(data,db)
         //     })
         // },Promise.resolve())
-        console.log(tuples.length)
+        // console.log(tuples.length)
         await promiseProcessing(tuples,logdata,db,mongod)
-        console.log("Done~!!!")
     }).catch((err)=>{
         // console.log(count)
         // console.log(tuples)
         throw err
     })
-    PROMISE.all(inputdata).then(async (result)=>{
-        console.log("DB INPUT Done")
-        mongod.close()
-    }).catch((err)=>{
-        console.log(err)
-    })
 }
 
 let promiseProcessing = async (data,count,db,mongod) =>{
-         console.log(count)
-        if(count==140){
+    // console.log(count)
+    // console.log(data.length)
+        if(count==data.length){
+            console.log("들어옴")
             mongod.close()
             return "end"
         }
