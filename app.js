@@ -11,8 +11,7 @@ let page = require("./router/page");
 let user = require("./router/user");
 let board = require("./router/board");
 
-let logger = require('morgan')
-
+let logger = require("morgan");
 
 // http & https
 let http = require("http");
@@ -20,8 +19,6 @@ let http = require("http");
 // 모듈 자체는 설치하였습니다
 let https = require("https");
 let server = http.createServer(app).listen(3000, "localhost", () => {
-  let cheerio = require("./module/cheerio");
-  cheerio.test();
   console.log("server is on");
 });
 
@@ -42,17 +39,10 @@ let mongo = require("./module/mongodb");
 let mariadb = require("./module/mariadb");
 
 //MiddleWare 연결부
-<<<<<<< HEAD
-
+app.use(logger("dev"));
 app.use(express.json()); //
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-=======
-app.use(logger('dev'));
-app.use(express.json()) //
-app.use(express.urlencoded({extended:true}))
-app.use(cookieParser())
->>>>>>> dfb04dae7c9f1d00ef87c3c643e776218a008bf9
 
 // 뷰 템플릿 엔진과 현재 view를 담을 path 지정
 app.set("views", path.join(__dirname, "view"));
@@ -61,22 +51,19 @@ app.set("view engine", "ejs");
 // 초기 테스트용으로 만들어 놓은 장치입니다
 // 별의미 없었고 초기 MongoDB 커네팅을 체크하기 이용을 하였습니다.
 // 2020.11.22 mysql 테스트용 데이터 생성
-<<<<<<< HEAD
-=======
-app.get('/', ((req, res) => {
-    res.setHeader("Content-type","text/html;charset=utf8")
-    // let sess = req.session
-    // if(sess.userId != null){
-    //     res.send(`로그인 정보 확인 ${sess.userId} / ${sess.userName}`)
-    //
-    // }else{
-    //     res.send("this page")
-    // }
-    mongo.connectCheck();
-    mariadb.getConn();
-    res.redirect('/home')
-}))
->>>>>>> dfb04dae7c9f1d00ef87c3c643e776218a008bf9
+app.get("/", (req, res) => {
+  res.setHeader("Content-type", "text/html;charset=utf8");
+  // let sess = req.session
+  // if(sess.userId != null){
+  //     res.send(`로그인 정보 확인 ${sess.userId} / ${sess.userName}`)
+  //
+  // }else{
+  //     res.send("this page")
+  // }
+  mongo.connectCheck();
+  mariadb.getConn();
+  res.redirect("/home");
+});
 
 app.get("/", (req, res) => {
   res.setHeader("Content-type", "text/html;charset=utf8");
