@@ -8,7 +8,7 @@ let objectId = require("mongodb").ObjectID;
 
 // null 값에 대한 처리를 위해 불러온 모듈
 // 최근 자바에서 사용되는 Optional과 유사하다고 생각합니다.
-let assert = require("assert");
+// let assert = require('assert')
 let url = "mongodb://uikanghome.iptime.org:3001";
 let mongodb = "test";
 let mondb = "";
@@ -48,12 +48,47 @@ let mongo = {
             return;
           }
           let data = result;
-          console.log(data);
-
           db.close();
           callback(data);
         });
     });
+  },
+  getmovieseq: async (title) => {
+    let seq = 0;
+    let data = await mongoClient.connect(url, async (err, db) => {
+      if (err) {
+        db.close();
+        console.log(err);
+        throw err;
+        return;
+      }
+      mondb = await db.db(mongodb);
+      await mondb
+        .collection("movie")
+        .find({ subject: title })
+        .toArray((err, result) => {
+          if (result.length == 0) seq = 0;
+          else {
+            // console.log("있음")
+            // console.log(result)
+            seq = result;
+            console.log("리턴처리함");
+            db.close();
+            return seq;
+          }
+        });
+      let result = await mondb.collection("movie").find({ subject: title });
+      return result;
+    });
+    // let db = await mongoClient.connect(url);
+    // console.log("----------------------------")
+    // console.log(db)
+    // let thing =  db.collection("movie").find({ title: "런" });
+    // db.close()
+    // console.log(thing)
+  },
+  mongConnect: async () => {
+    return mongoClient.connect(url);
   },
 };
 
