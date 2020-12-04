@@ -33,7 +33,6 @@ router.post('/login',((req, res) => {
 
 router.delete('/delete',((req, res) => {
 
-
 }))
 
 router.get('/logout',(((req, res) => {

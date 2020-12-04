@@ -10,6 +10,7 @@ let bodyParser = require('body-parser')
 let page = require('./router/page')
 let user = require('./router/user')
 let board = require('./router/board')
+let movie = require('./router/movie')
 
 let logger = require('morgan')
 
@@ -76,6 +77,8 @@ app.use('/data',express.static('public'))
 // 라우팅 그룹입니다.
 app.use('/user',user)
 app.use('/board',board)
+app.use('/movie',movie)
+
 
 // 실제 view가 렌더링 되고 처리되는 부분
 // app.use('/page', page)

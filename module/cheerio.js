@@ -34,18 +34,16 @@ let add_seq = 0;
 // [11-28] - 동기식 처리를 위해 코드 수정중
 //           해결법 찾아야 됨
 // [11-30] - PROMISE ALL 통해 이전 url 링크를 통한 모든 작업이 확인된후에 작업시작하는것으로 동기처리
+
 async function Clolling(){
     let add_play_seq = 0;
-
-
     let title = ''
     let mongod = await mongo.mongConnect();
     let db = await mongod.db('test')
     let data = await db.collection('theaters').find({},{_id:'0',theaters_seq:'1'}).toArray();
-    // console.log(data);
-    // mongod.close()
     // BlueBird 모듈을 통해 하단의 코드를 PROMISE ALL을 통해
     // 순차적으로 처리를 하게 끔 만들 계획
+    //[12.02]
     let tuples = new Array()
 
     ////////////////////////////////////////////
