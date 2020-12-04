@@ -1,20 +1,22 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-module.exports = class CgvCrawling {
-  getHtml = async (url) => {
+let CGVcrawiling = {
+  getHtml: async (url) => {
     try {
       return await axios.get(url);
     } catch (error) {
       console.error(error);
     }
-  };
+  },
 
-  getMovieList(body) {
+  getMovieList: (body, theaters) => {
     var tuples = [];
+
     const $ = cheerio.load(body.data);
+
     const $movieList = $("body > div > div.sect-showtimes > ul > li");
-    $movielist.map((i, elem) => {
+    $movieList.map((i, elem) => {
       // 영화 제목 가져오기
       if ($(elem).find("strong").text()) {
         title = $(elem).find("div > div.info-movie > a > strong").text().trim();
@@ -29,15 +31,15 @@ module.exports = class CgvCrawling {
         else time["href"] = null;
         time["time"] = $($timetablelist[i]).find("em").text();
         time["seat"] = $($timetablelist[i]).find("span").text();
-        time["theater"] = data.theaters_seq;
-        console.log(time);
+        time["theater"] = theaters.theaters_seq;
+        // console.log(time);
         tuples.push(time);
       }
     });
     return tuples;
-  }
+  },
 
-  getTimetable(movie) {
+  getTimetable: (movie) => {
     var tuples = [];
     const timetables = movie.find("div > div.type-hall > div.info-timetable > ul > li");
 
@@ -49,23 +51,7 @@ module.exports = class CgvCrawling {
       };
     });
     return tuples;
-  }
+  },
 };
 
-// getHtml().then((html) => {
-//   let timetables = [];
-//   const $ = cheerio.load(html.data);
-//   const $movieList = $("body > div > div.sect-showtimes > ul > li");
-
-//   $movieList.each(function (i, elem) {
-//     timetables[i] = {
-//       title: $(this).find("div > div.info-movie > a > strong").text(),
-//       timetable: getTimetable($(this)),
-//     };
-//   });
-
-//   const data = timetables.filter((n) => n.title);
-
-//   console.log("test1231313 ", data[0].timetable);
-//   return data;
-// });
+module.exports = CGVcrawiling;

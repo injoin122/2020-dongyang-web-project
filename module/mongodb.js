@@ -9,17 +9,17 @@ let mongodb = "test"
 let mondb = ""
 
 //Mongo mainDB명
-function connMongo (callback){
-    mongoClient.connect(url,(err,db)=>{
-        // assert.equal(null,err);
-        if(err){
-            console.log(err)
-        }
-        console.log("Connect Succes to Server")
-        db.close()
-    })
-
-}
+// function connMongo (callback){
+//     mongoClient.connect(url,(err,db)=>{
+//         // assert.equal(null,err);
+//         if(err){
+//             console.log(err)
+//         }
+//         console.log("Connect Succes to Server")
+//         db.close()
+//     })
+//
+// }
 
 // 변경해도 상관없습니다.
 // 기본적으로
@@ -117,7 +117,8 @@ let mongo = {
                 }
             })
         })
-    }
+    },
+
 
 
 }

@@ -1,22 +1,20 @@
 let express = require("express");
-// Express 웹서버 관리
 let app = express();
-let port = 3000;
 var path = require("path");
-let host = "0.0.0.0";
+
 let cookieParser = require("cookie-parser");
 let bodyParser = require("body-parser");
 
 let page = require("./router/page");
+
 let user = require("./router/user");
 let board = require("./router/board");
+let movie = require("./router/movie");
 
 let logger = require("morgan");
 
 // http & https
 let http = require("http");
-// 혹시 사용하게 될수도 있을거 같아서
-// 모듈 자체는 설치하였습니다
 let https = require("https");
 let server = http.createServer(app).listen(3000, "localhost", () => {
   console.log("server is on");
@@ -44,13 +42,9 @@ app.use(express.json()); //
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// 뷰 템플릿 엔진과 현재 view를 담을 path 지정
 app.set("views", path.join(__dirname, "view"));
 app.set("view engine", "ejs");
 
-// 초기 테스트용으로 만들어 놓은 장치입니다
-// 별의미 없었고 초기 MongoDB 커네팅을 체크하기 이용을 하였습니다.
-// 2020.11.22 mysql 테스트용 데이터 생성
 app.get("/", (req, res) => {
   res.setHeader("Content-type", "text/html;charset=utf8");
   // let sess = req.session
@@ -82,14 +76,10 @@ app.get("/", (req, res) => {
 
 // 파일 절대경로 관리
 app.use("/data", express.static("public"));
-
-// 해당부분은 페이지 라우팅이 아닌 ajax.post get or form action 처리를 위해 만들어진
-// 라우팅 그룹입니다.
 app.use("/user", user);
 app.use("/board", board);
+app.use("/movie", movie);
 
-// 실제 view가 렌더링 되고 처리되는 부분
-// app.use('/page', page)
 let router = require("./router/page")(app);
 
 // 소켓 통신을 할수도 있을것 같아서
