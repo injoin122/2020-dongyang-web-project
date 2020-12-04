@@ -7,7 +7,6 @@ const PROMISE = require("bluebird");
 
 async function Clolling() {
   console.log("실행");
-
   let title = "";
   let mongod = await mongo.mongConnect();
   let db = await mongod.db("test");
@@ -24,6 +23,7 @@ async function Clolling() {
     let body = await CGVcrawiling.getHtml(cgv);
     // console.log(body);
     tuples = CGVcrawiling.getMovieList(body, theaters);
+    // console.log(tuples);
   });
 
   PROMISE.all(prom)
