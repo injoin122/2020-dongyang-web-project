@@ -18,11 +18,10 @@ async function Clolling() {
   let prom = data.map(async (theaters) => {
     let theaters_seq = theaters.theaters_seq.replace("C-", "");
     let date = "20201127";
-
     let cgv = `http://www.cgv.co.kr/common/showtimes/iframeTheater.aspx?areacode=01&theatercode=${theaters_seq}&date=${date}`;
     let body = await CGVcrawiling.getHtml(cgv);
     // console.log(body);
-    tuples = CGVcrawiling.getMovieList(body, theaters);
+    CGVcrawiling.getMovieList(tuples,body, theaters);
     // console.log(tuples);
   });
 

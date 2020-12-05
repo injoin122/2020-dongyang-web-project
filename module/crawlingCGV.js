@@ -10,8 +10,7 @@ let CGVcrawiling = {
     }
   },
 
-  getMovieList: (body, theaters) => {
-    var tuples = [];
+  getMovieList: (tuples,body, theaters) => {
 
     const $ = cheerio.load(body.data);
 

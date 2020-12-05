@@ -159,6 +159,7 @@ let mongo = {
   },
 
   insertCgvData: async (data, count, db, mongod) => {
+
     // console.log(data.length)
     if (count == data.length) {
       console.log("데이터 없음");
