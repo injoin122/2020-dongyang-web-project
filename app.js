@@ -59,26 +59,12 @@ app.get("/", (req, res) => {
   res.redirect("/home");
 });
 
-app.get("/", (req, res) => {
-  res.setHeader("Content-type", "text/html;charset=utf8");
-  // let sess = req.session
-  // if(sess.userId != null){
-  //     res.send(`로그인 정보 확인 ${sess.userId} / ${sess.userName}`)
-  //
-  // }else{
-  //     res.send("this page")
-  // }
-  mongo.connectCheck();
-  mariadb.getConn();
-
-  res.redirect("/home");
-});
-
 // 파일 절대경로 관리
 app.use("/data", express.static("public"));
 app.use("/user", user);
 app.use("/board", board);
 app.use("/movie", movie);
+app.use(express.static(path.join(__dirname, "public")));
 
 let router = require("./router/page")(app);
 
