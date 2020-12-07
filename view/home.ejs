@@ -1,217 +1,142 @@
 <html>
-<head>
-    <meta charset="utf8">
+  <head>
+    <meta charset="utf8" />
     <title>메인 페이지</title>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<style>
-    body{
-        background-color: coral;
-        font-size : 15px;
+  </head>
+  <style>
+    body {
+      background-color: coral;
+      font-size: 15px;
     }
     #mainWrap {
-        position: absolute;
-        left: 0;right: 0;top: 0;bottom: 0;
-        margin: 0 auto;
-        transition: width 1s,height 1s;
-        /*transition-duration: 2s,2s;*/
-        background-color: rgba(255,255,255,0.8);
-        /* 70 em == 15px * 7 */
-        height: 0em;
-        width: 0em;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: 0 auto;
+      transition: width 1s, height 1s;
+      /*transition-duration: 2s,2s;*/
+      background-color: rgba(255, 255, 255, 0.8);
+      /* 70 em == 15px * 7 */
+      height: 0em;
+      width: 0em;
     }
 
-    #header-section{
-        opacity: 0;
-        /*background-color: rgba(255,255,255,0.5);*/
-        transition: opacity 1s;
-        transition-delay: 1s;
+    #header-section {
+      opacity: 0;
+      /*background-color: rgba(255,255,255,0.5);*/
+      transition: opacity 1s;
+      transition-delay: 1s;
     }
 
     /* 컨텐츠 박스 내부 CSS*/
-    .content-box{
-        /*display: grid;*/
-        /*grid-template-columns: 1fr 2fr 1fr;*/
-
+    .content-box {
+      /*display: grid;*/
+      /*grid-template-columns: 1fr 2fr 1fr;*/
     }
 
-    #side-ws{
-        transition: opacity 1s;
-        transition-delay: 2s;
-        opacity: 0;
-        /*height: 52em;*/
-        padding: 0;
+    #side-ws {
+      transition: opacity 1s;
+      transition-delay: 2s;
+      opacity: 0;
+      /*height: 52em;*/
+      padding: 0;
     }
 
-    #maincontent{
-        transition: opacity 1s;
-        transition-delay: 2.5s;
-        opacity: 0;
-        /*height: 52em;*/
+    #maincontent {
+      transition: opacity 1s;
+      transition-delay: 2.5s;
+      opacity: 0;
+      /*height: 52em;*/
     }
-    #side-site{
-        padding: 0;
-        opacity: 0;
-        transition: opacity 1s;
-        transition-delay: 2.7s;
-        /*height: 52em;*/
+    #side-site {
+      padding: 0;
+      opacity: 0;
+      transition: opacity 1s;
+      transition-delay: 2.7s;
+      /*height: 52em;*/
     }
 
     /* 하단부 관리*/
-    footer{
-        opacity: 0;
-        transition: opacity 1s;
-        transition-delay: 3s;
+    footer {
+      opacity: 0;
+      transition: opacity 1s;
+      transition-delay: 3s;
     }
-
-
 
     /* 부트 스트랩 기본 설정 CSS 템플릿*/
     /* Remove the navbar's default margin-bottom and rounded borders */
     .navbar {
-        margin-bottom: 0;
-        border-radius: 0;
+      margin-bottom: 0;
+      border-radius: 0;
     }
 
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
+    .row.content {
+      height: 450px;
+    }
 
     /* Set gray background color and 100% height */
     .sidenav {
-        padding-top: 20px;
-        background-color: #f1f1f1;
-        height: 100%;
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
     }
     /* Set black background color, white text and some padding */
     footer {
-        background-color: #555;
-        color: white;
-        padding: 15px;
+      background-color: #555;
+      color: white;
+      padding: 15px;
     }
     /* On small screens, set height to 'auto' for sidenav and grid */
     @media screen and (max-width: 767px) {
-        .sidenav {
-            height: auto;
-            padding: 15px;
-        }
-        .row.content {height:auto;}
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {
+        height: auto;
+      }
     }
-</style>
+  </style>
 
+  <body></body>
+  <script>
+    let main = document.querySelector("#mainWrap");
+    let head = document.querySelector("#header-section");
 
+    let sideright = document.querySelector("#side-site");
 
-<!-- W3CSchool 부트 스트랩 웹사이트의 템플릿 디자인 일부 개조해서 사용-->
-<!-- 원본 출처 링크 : https://www.w3schools.com/bootstrap/bootstrap_templates.asp-->
-<body>
-<div id="mainWrap">
-<section id="header-section">
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/home">Logo</a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">메인페이지</a></li>
-                <% if(logdata.userId){%>
-                <li><a href="#">게시판</a></li>
-                <li><a href="#">소켓 이용</a></li>
-                <!--     관리자만 식별 목차     -->
-                <li><a href="#">관리자 관리</a></li>
-                <!--            -->
-                <% }%>
-            </ul>
-            <% if(!logdata.userId){%>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> 접속</a></li>
-                <li><a href="/join"><span class="glyphicon glyphicon-ok-sign"></span> 회원가입</a></li>
-            </ul>
-            <%}else{%>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/user/logout"><span class="glyphicon glyphicon-log-out"></span> 종료</a></li>
-                </ul>
-            <%}%>
-        </div>
-    </div>
-</nav>
-</section>
-<div class="container-fluid text-center content-box">
+    let maincontent = document.querySelector("#maincontent");
 
-    <div class="row content">
+    let siqeleft = document.querySelector("#side-ws");
 
-        <section id="side-ws" class="col-sm-2 col-xs-12">
-        <div class="sidenav">
-            <p><a href="#">추천 링크</a></p>
-            <p>관리자가 등록하는 이달의 추천 도서</p>
-            <p>콜 스페이스로 시간이 지나가면서 넘어가게 구현</p>
-            <p>전송 받아오는 것 구현</p>
-            <p>아니면 관리자가 컨트롤하는 부분</p>
-        </div>
-        </section>
+    let footer = document.querySelector("footer");
 
-        <section id="maincontent" class="col-sm-8 col-xs-12">
-            <div class=" text-left ">
-                <h1>사이트 설명부</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <hr>
-                <h3>Test</h3>
-                <p>Lorem ipsum...</p>
-            </div>
-        </section>
-
-        <section id="side-site" class="col-sm-2 col-xs-12">
-        <div class=" sidenav ">
-            <div class="well">
-                <p>관련사이트 이동</p>
-            </div>
-            <div class="well">
-                <p>관련 사이트 이동</p>
-            </div>
-        </div>
-        </section>
-    </div>
-
-</div>
-    <footer class="container-fluid text-center">
-        <p>Footer Text</p>
-    </footer>
-</div>
-
-</body>
-<script>
-    let main = document.querySelector("#mainWrap")
-    let head = document.querySelector("#header-section")
-
-    let sideright = document.querySelector("#side-site")
-
-    let maincontent = document.querySelector("#maincontent")
-
-    let siqeleft = document.querySelector("#side-ws")
-
-    let footer = document.querySelector("footer")
-
-    window.onload = ()=>{
-        console.log(siqeleft)
-        console.log(maincontent)
-        console.log(sideright)
-        main.style.height = "100%";
-        main.style.width = "100%";
-        head.style.opacity = 1;
-        siqeleft.style.opacity = 1;
-        maincontent.style.opacity = 1;
-        maincontent.style.opacity = 1;
-        sideright.style.opacity = 1;
-        footer.style.opacity = 1;
-    }
-</script>
+    window.onload = () => {
+      console.log(siqeleft);
+      console.log(maincontent);
+      console.log(sideright);
+      main.style.height = "100%";
+      main.style.width = "100%";
+      head.style.opacity = 1;
+      siqeleft.style.opacity = 1;
+      maincontent.style.opacity = 1;
+      maincontent.style.opacity = 1;
+      sideright.style.opacity = 1;
+      footer.style.opacity = 1;
+    };
+  </script>
 </html>

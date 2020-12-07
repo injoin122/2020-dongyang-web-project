@@ -42,8 +42,15 @@ app.use(express.json()); //
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.set("views", path.join(__dirname, "view"));
-app.set("view engine", "ejs");
+// 교수님이 설명하신 Layout 연동부분입니다.
+// 기본적으로 파일명이 layout <- 동작하기 떄문에 index를
+// 변경하게 되었습니다.
+// 사용법은 /route/page.js 파일 확인 부탁드립니다.
+app.set("views", path.join(__dirname, "view"))
+    .set("view engine", "ejs")
+    .use(require('express-ejs-layouts'))
+    .set('layout','layout');
+
 
 app.get("/", (req, res) => {
   res.setHeader("Content-type", "text/html;charset=utf8");
@@ -56,21 +63,6 @@ app.get("/", (req, res) => {
   // }
   mongo.connectCheck();
   mariadb.getConn();
-  res.redirect("/home");
-});
-
-app.get("/", (req, res) => {
-  res.setHeader("Content-type", "text/html;charset=utf8");
-  // let sess = req.session
-  // if(sess.userId != null){
-  //     res.send(`로그인 정보 확인 ${sess.userId} / ${sess.userName}`)
-  //
-  // }else{
-  //     res.send("this page")
-  // }
-  mongo.connectCheck();
-  mariadb.getConn();
-
   res.redirect("/home");
 });
 
@@ -79,6 +71,7 @@ app.use("/data", express.static("public"));
 app.use("/user", user);
 app.use("/board", board);
 app.use("/movie", movie);
+app.use(express.static(path.join(__dirname, "public")));
 
 let router = require("./router/page")(app);
 
