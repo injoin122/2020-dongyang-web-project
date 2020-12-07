@@ -73,6 +73,8 @@ app.use("/board", board);
 app.use("/movie", movie);
 app.use(express.static(path.join(__dirname, "public")));
 
+
+
 let router = require("./router/page")(app);
 
 // 소켓 통신을 할수도 있을것 같아서

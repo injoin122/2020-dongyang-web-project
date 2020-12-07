@@ -1,10 +1,10 @@
 let mongoClient = require('mongodb').MongoClient
 let objectId = require('mongodb').ObjectID
-
+let crypto = require('crypto')
 // null 값에 대한 처리를 위해 불러온 모듈
 // 최근 자바에서 사용되는 Optional과 유사하다고 생각합니다.
 let assert = require('assert')
-let url = 'mongodb://uikanghome.iptime.org:3001';
+let url = 'mongodb://uikanghome.iptime.org:3003';
 let mongodb = "test"
 let mondb = ""
 
@@ -30,97 +30,42 @@ let mongo = {
     connectCheck :async ()=>{
         connMongo();
     },
-    insertUser : (id,pwd,name,email,address,check,option,res)=>{
+    insertUser : (id,pwd,email,mobile,callback)=>{
         mongoClient.connect(url,(err,db)=>{
-            // assert.equal(null,err);
-            // console.log("Connect Succes to Server")
-            if(err){
-                db.close()
-                res.send(err)
-            }
-            mondb = db.db(mongodb);
-            mondb.collection('users').insertOne({
-              id : id,
-              pwd : pwd,
-              name: name,
-              email : email,
-              address : address,
-              check : check,
-                // check부분은 프론트에서의 체크박스 폼 부분에 데이터를 받아오는 부분입니다.
-                // [ ] <= 배열 형태로 데이터가 들어가는 것을 확인하였습니다.
-              option : option
-            },(err)=>{
-                if(err){
-                    console.log(err)
-                    throw err
-                    db.close()
-                    res.send(err)
-                }
-                db.close()
-                res.send("1")
-            })
+            mondb = db.db(mongodb)
+            mondb.collection('users')
+                .findOne({_id:id})
+                .then((result) =>{
+                    console.log("들어옴")
+                    if(result!=null) {console.log(result);callback(1);return ;}
+                    try{
+                        let salt = Math.round((new Date().valueOf() * Math.random())) + "";
+                        let hashPassword = crypto.createHash("sha512").update(pwd + salt).digest("hex");
+                        mondb.collection('users')
+                            .insertOne({_id:id,pwd:hashPassword,email:email,mobile:mobile,salt:salt})
+                            .then(err=>{callback("ok")})
+                    }catch (e) {
+                        throw e
+                        console.log(3);
+                        callback(2)
+                    }finally {
+                        db.close();
+                    }
+                })
         })
     },
-
-    checkUser:(id,res)=>{
+    loginCheck:(id,pwd,callback)=>{
         mongoClient.connect(url,(err,db)=>{
-            // assert.equal(null,err);
-            // console.log("Connect Succes to Server")
-            if(err){
-                res.send(err)
-            }
-            mondb = db.db(mongodb);
-            let data = mondb.collection('users').count({
-                id : id,
-            },(err,result)=>{
-                if(err){
-                    console.log(err)
-                    throw err
-                    res.send("database error")
-                }
-                if(result!=0) {
-                    db.close()
-                    res.send('0')
-                }else{
-                    db.close()
-                    res.send("1")
-                }
+            mondb = db.db(mongodb)
+            mondb.collection('users').findOne({_id:id}).then((result)=>{
+                if(result==null){db.close();callback(1);return }
+                let salt = result.salt;
+                let hashPassword = crypto.createHash("sha512").update(pwd + salt).digest("hex");
+                if(hashPassword != result.pwd){db.close(),callback(2);return }
+                else {db.close();callback(3);return}
             })
         })
-    },
-    loginCheck:(id,pwd,res,sess)=>{
-        mongoClient.connect(url,(err,db)=>{
-            assert.equal(null,err);
-            // console.log("Connect Succes to Server")
-            if(err){
-                res.send(err)
-            }
-            mondb = db.db(mongodb);
-            let data = mondb.collection('users').findOne({
-                id : id,
-                pwd : pwd
-            },(err,result)=>{
-                console.log(result)
-                if(err){
-                    console.log(err)
-                    throw err
-                    res.send("database error")
-                }
-                if(result==null) {
-                    db.close()
-                    res.send('로그인에 대한 정보값이 잘못됬습니다.')
-                }else{
-                    sess.userId = result.id;
-                    sess.userName = result.name;
-                    db.close()
-                    res.send("1")
-                }
-            })
-        })
-    },
-
-
-
+    }
 }
 
 module.exports = mongo;
