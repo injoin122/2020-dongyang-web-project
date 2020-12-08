@@ -52,6 +52,18 @@ let CGVcrawiling = {
     });
     return tuples;
   },
+
+  //영화 제목을 이용하여 영화 정보를 가져옵니다.
+  getMovieInfo: (movie) => {
+    movieInfo = {};
+    //movieInfo["genres"] = movieOpenAPI.getMovieGenres(movieName);
+    //movieInfo["directors"] = movieOpenAPI.getMovieDirectors(movieName);
+    //movieInfo["actors"] = movieOpenAPI.getMovieActors(movieName, False);
+    // movieInfo["poster"] = movieOpenAPI.getMoviePosterPath(movieName);
+    //movieInfo["score"] = movieOpenAPI.getMovieReviews(movieName)["score"];
+    //movieInfo["reviews"] = movieOpenAPI.getMovieReviews(movieName)["reviews"];
+    return movieInfo;
+  },
 };
 
 module.exports = CGVcrawiling;
