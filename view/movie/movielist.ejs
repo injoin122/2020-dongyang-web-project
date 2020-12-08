@@ -1,1 +1,45 @@
-<div><%= data[0]%></div>
+<div class="row justify-content-around">
+  <% cgvData.forEach((data)=>{ %>
+  <div class="col-5 poster">
+    <img class="movie_image" src="/images/movie_image.jpg" alt="영화 포스터" />
+    <div class="movie_name"><%= data.th_name %></div>
+  </div>
+  <% }) %>
+</div>
+
+<style>
+  .poster {
+    width: auto;
+    padding-right: 0px;
+    padding-left: 0px;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    border: solid 1px #e2e2e2;
+    background-color: #ffffff;
+    font-family: NanumGothic;
+    font-size: 15px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .movie_image {
+    width: 100%;
+  }
+
+  .movie_name {
+    font-family: NanumGothic;
+    font-size: 15px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+
+    letter-spacing: normal;
+    text-align: center;
+    color: #000f34;
+    margin: 0 auto;
+  }
+</style>

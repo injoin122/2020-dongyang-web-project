@@ -1,20 +1,19 @@
-// view 대한 처리 렌더링을 담당하는 부분입니다.
-
+let mongo = require("../module/moviemongo");
 module.exports = function (app) {
-  app.get("/login", (req, res) => {
-    res.render("login");
-  });
   app.get("/join", (req, res) => {
-    res.render("join");
-  });
-
-  app.get("/home", (req, res) => {
     let sess = req.session;
-
-    res.render("index", { logdata: sess, title: "임시" });
+    res.render("user/join", { title: "임시", auth: sess });
+  });
+  app.get("/login", (req, res) => {
+    let sess = req.session;
+    res.render("user/login", { title: "임시", auth: sess });
   });
 
-  // router.get('/chat',((req, res) => {
-  //     res.render('chatclient')
-  // }))
+  app.get("/home", async (req, res) => {
+    let sess = req.session;
+    await mongo.alltheaterfound((result) => {
+      // console.log(result);
+      res.render("movie/movielist", { cgvData: result, auth: sess });
+    });
+  });
 };

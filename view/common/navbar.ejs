@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
   <div class="container">
-    <a class="navbar-brand pointer" style="align-self: flex-start">우리영화볼래?</a>
+    <a class="navbar-brand pointer" style="align-self: flex-start" href="/">우리영화볼래?</a>
     <button
       class="navbar-toggler navbar-toggler-right"
       type="button"
@@ -16,7 +16,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive" style="justify-content: flex-end">
       <ul class="navbar-nav" style="justify-content: flex-end">
         <li class="nav-item">
-          <a class="nav-link pointer">Home</a>
+          <a class="nav-link pointer" href="/">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link pointer">About</a>
@@ -35,7 +35,11 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link pointer">Login</a>
+          <% if(!auth.userId){%>
+          <a class="nav-link pointer" href="/login">Login</a>
+          <%}else{%>
+          <a class="nav-link pointer" href="/user/logout">logout</a>
+          <%}%>
         </li>
       </ul>
     </div>

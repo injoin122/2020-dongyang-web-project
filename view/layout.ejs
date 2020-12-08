@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><%= title %> 부트스트랩 101 템플릿</title>
+    <title>부트스트랩 101 템플릿</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <!-- 부트스트랩 -->
     <link
@@ -14,23 +14,22 @@
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
-
     <!-- Custom styles for this template -->
     <link href="css/clean-blog.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   </head>
 
   <body>
     <%- include ("./common/navbar") %> <%- include ("./common/masthead") %>
     <div class="container">
-      페이지 라우터가 들어갑니다.
-      <!-- <router-outlet></router-outlet> -->
+      <!--      페이지 라우터가 들어갑니다.-->
+      <%- body%>
     </div>
     <%- include ("./common/footer") %>
     <!-- /container -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   </body>
 </html>
 

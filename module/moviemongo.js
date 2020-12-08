@@ -171,12 +171,14 @@ let mongo = {
       .then((result) => {
         if (result.length == 0) {
           db.collection("movie")
-            .find({}, {})
+            .find({}, {sort:{_id:-1}})
             .toArray()
             .then((result) => {
+              if(result.length == 0) add_seq = 1;
+              else add_seq = result[0]._id + 1;
               db.collection("movie")
                 .insertOne({
-                  _id: ++add_seq,
+                  _id: add_seq,
                   SUBJECT: data[count].title,
                   COUNTRY: "대한민국",
                   GENRE: "",

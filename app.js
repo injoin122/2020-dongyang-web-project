@@ -30,30 +30,20 @@ app.use(
   })
 );
 
-//몽고 DB
-//mariadb 10.13 version
-//연결 테스트를 위해 불러왔습니다.
 let mongo = require("./module/mongodb");
 let mariadb = require("./module/mariadb");
 
-//MiddleWare 연결부
+//MiddleWare
 app.use(logger("dev"));
-app.use(express.json()); //
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.set("views", path.join(__dirname, "view"));
-app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "view")).set("view engine", "ejs").use(require("express-ejs-layouts")).set("layout", "layout");
 
 app.get("/", (req, res) => {
   res.setHeader("Content-type", "text/html;charset=utf8");
-  // let sess = req.session
-  // if(sess.userId != null){
-  //     res.send(`로그인 정보 확인 ${sess.userId} / ${sess.userName}`)
-  //
-  // }else{
-  //     res.send("this page")
-  // }
+
   mongo.connectCheck();
   mariadb.getConn();
   res.redirect("/home");
@@ -68,7 +58,5 @@ app.use(express.static(path.join(__dirname, "public")));
 
 let router = require("./router/page")(app);
 
-// 소켓 통신을 할수도 있을것 같아서
-// HTML에서 사용되는 wss(Web Socket Service) 방식으로 구현하였습니다
 let sockio = require("./module/socket");
 sockio(server);
