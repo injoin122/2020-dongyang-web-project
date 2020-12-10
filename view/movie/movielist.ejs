@@ -1,0 +1,95 @@
+<script>
+    let KOBIS_API_KEY = "5a616755c609136c99d80a46c29b66fc";
+    let TMDB_API_KEY = "4d3d61f7c0dea3ae87ef5c5d9cf996ee";
+
+    function getMoviePosterImg(element) {
+        var url = "https://api.themoviedb.org/3/search/movie?";
+        url += "&api_key=" + TMDB_API_KEY;
+        url += "&language=ko-KR";
+        url += "&query=" + element.title;
+        url += "&page=1";
+        var imgUrl = "https://image.tmdb.org/t/p/w300";
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function(data, status, xhr) {
+                console.log(imgUrl, data["results"][0]["poster_path"]);
+                element.src = imgUrl + data["results"][0]["poster_path"];
+            },
+            error: function(e) {
+                console.log(e);
+                imgUrl = "";
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var posters = $(".movie_image");
+
+        for (var i = 0; i < posters.length; i++) {
+            getMoviePosterImg(posters[i]);
+        }
+    });
+</script>
+
+
+<div class="row justify-content-around">
+    <!-- 테스트 -->
+    <div class="col-5 poster">
+        <img class="movie_image" src="/images/movie_image.jpg" alt="영화 포스터" title="이웃사촌" />
+    </div>
+    <div class="col-5 poster">
+        <img class="movie_image" src="/images/movie_image.jpg" alt="영화 포스터" title="도굴" />
+    </div>
+    <div class="col-5 poster">
+        <img class="movie_image" src="/images/movie_image.jpg" alt="영화 포스터" title="런" />
+    </div>
+    <div class="col-5 poster">
+        <img class="movie_image" src="/images/movie_image.jpg" alt="영화 포스터" title="더 프롬" />
+    </div>
+    <!-- 테스트 -->
+    <% cgvData.forEach((data)=>{ %>
+    <div class="col-5 poster">
+        <img class="movie_image" src="/images/movie_image.jpg" alt="영화 포스터" title="악인전" />
+        <div class="movie_name"><%= data.th_name %></div>
+    </div>
+    <% }) %>
+</div>
+
+<style>
+    .poster {
+        width: auto;
+        padding-right: 0px;
+        padding-left: 0px;
+        border-radius: 5px;
+        box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+        border: solid 1px #e2e2e2;
+        background-color: #ffffff;
+        font-family: NanumGothic;
+        font-size: 15px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: normal;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .movie_image {
+        width: 100%;
+    }
+
+    .movie_name {
+        font-family: NanumGothic;
+        font-size: 15px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+
+        letter-spacing: normal;
+        text-align: center;
+        color: #000f34;
+        margin: 0 auto;
+    }
+</style>
