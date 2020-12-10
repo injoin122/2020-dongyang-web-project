@@ -1,0 +1,84 @@
+<style>
+    #content{
+        animation: slidein;
+        animation-fill-mode: both;
+
+    }
+    #ani{
+        animation: fadin;
+        animation-fill-mode: both;
+    }
+    @keyframes slidein {
+        0%{
+            margin-right: 100%;
+        }
+        100%{
+            margin-right: 0%;
+        }
+    }
+    @keyframes fadin {
+        0%{
+            opacity: 0;
+        }
+        50%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+</style>
+    <%if(moivelist.length == 0){%>
+        <p>검색되는 영화가 없습니다.</p>
+    <%}else{%>
+        <% let i = 1 %>
+    <% moivelist.forEach(movie=>{if(i<3)i=i+0.5%>
+            <div id="content" style="animation-duration: <%= i%>s;padding: 2px ;margin-top: 8px;border:1px solid rgba(204,204,204,0.3);box-shadow: 3px 2px 1px rgba(204,204,204,0.3)">
+                <div id="ani" class="row" style="animation-duration: <%= i%>s">
+                <div class="card col-md-4 col-lg-4 col-sm-12" style="padding: 0">
+                    <div class="card-header"><img src="<%= movie.poster%>" /></div>
+                    <div class="card-body"><strong><%= movie.title%></strong></div>
+                </div>
+                <div class="col-md-8 col-lg-8 col-sm-12" style="margin: 0">
+                            <div class="row">
+                                <%if(movie.stream){%>
+                                    <div class="st col-md-4" style="display:inline-block;">
+                                        <div>
+                                        스트리밍
+                                        <% movie.stream.forEach(data=>{%>
+                                            <br><img src="<%= data.image%>" style="max-width: 50px"/>
+                                            <a href="<%= data.link%>"><%=data.price%></a>
+                                            <%})%>
+                                        </div>
+
+                                    </div>
+                                <% } %>
+                                <%if(movie.buy){%>
+                                    <div class="by col-md-4">
+                                        <div>
+                                        구매
+                                        <% movie.buy.forEach(data=>{%>
+                                            <br><img src="<%= data.image%>" style="max-width: 50px"/>
+                                            <a href="<%= data.link%>"><%=data.price%></a>
+                                            <%})%>
+                                        </div>
+
+                                    </div>
+                                <% } %>
+                                <%if(movie.rental){%>
+                                    <div class="br col-md-4">
+                                        <div>
+                                        대여
+                                        <% movie.rental.forEach(data=>{%>
+                                            <br><img src="<%= data.image%>" style="max-width: 50px"/>
+                                            <a href="<%= data.link%>"><%=data.price%></a>
+                                            <%})%>
+                                        </div>
+
+                                    </div>
+                                <% } %>
+                    </div>
+                </div>
+                </div>
+        </div>
+<% })} %>
