@@ -1,10 +1,9 @@
 let express = require("express");
 let router = express.Router();
 let mongo = require("../module/moviemongo");
-<<<<<<< HEAD
+
 let vod = require("../module/vodSearch")
-=======
->>>>>>> 21dc892d0d5e04043fd8c862ef33595a1f378357
+
 console.log("영화관 파싱");
 
 // 영화관 전체에 대한 데이터
@@ -51,7 +50,7 @@ router.get("/playmv/:mveq", (req, res) => {
   });
 });
 
-<<<<<<< HEAD
+
 
 //JUST WATCH에서 VOD 서비스 검색결과를 Cheario로 가지오는곳
 // 추후 다른 모듈로 분리할 예정
@@ -65,7 +64,4 @@ router.post('/search',(async (req,res)=>{
 }))
 
 
-
-=======
->>>>>>> 21dc892d0d5e04043fd8c862ef33595a1f378357
 module.exports = router;

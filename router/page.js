@@ -4,6 +4,7 @@ module.exports = function (app) {
     let sess = req.session;
     res.render("user/join", { title: "임시", auth: sess });
   });
+
   app.get("/login", (req, res) => {
     let sess = req.session;
     res.render("user/login", { title: "임시", auth: sess });
@@ -16,4 +17,10 @@ module.exports = function (app) {
       res.render("movie/movielist", { cgvData: result, auth: sess });
     });
   });
+
+  app.get("/vodSearch", async (req, res) => {
+    let sess = req.session;
+    res.render("movie/movieSearch", { auth: sess });
+  });
+
 };
